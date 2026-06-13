@@ -13,7 +13,7 @@ export default function MobileDock() {
   const location = useLocation();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-espresso/95 backdrop-blur-xl border-t border-glass-border lg:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-10 bg-espresso/95 backdrop-blur-xl border-t border-glass-border lg:hidden">
       <div className="flex items-center justify-around h-16">
         {dockIcons.map((item) => {
           const isActive = location.pathname === item.href;

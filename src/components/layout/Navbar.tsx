@@ -1,130 +1,188 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone } from 'lucide-react';
-import { navItems, HOTEL_NAME, PHONE_NUMBER, getWhatsAppLink } from '@/lib/constants';
+import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
+import {
+  Home,
+  Bed,
+  UtensilsCrossed,
+  Sparkles,
+  Images,
+  Info,
+  Menu,
+  X,
+  Phone,
+} from 'lucide-react';
+import { HOTEL_NAME, PHONE_NUMBER } from '@/lib/constants';
 
-export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+interface NavItem {
+  name: string;
+  url: string;
+  icon: React.ElementType;
+}
+
+const navItems: NavItem[] = [
+  { name: 'Home', url: '/', icon: Home },
+  { name: 'Rooms', url: '/rooms', icon: Bed },
+  { name: 'Dining', url: '/dining', icon: UtensilsCrossed },
+  { name: 'Amenities', url: '/amenities', icon: Sparkles },
+  { name: 'Gallery', url: '/gallery', icon: Images },
+  { name: 'About', url: '/about', icon: Info },
+];
+
+// ─── DESKTOP TUBELIGHT NAVBAR ───
+function DesktopNavBar() {
   const location = useLocation();
+  const [activeTab, setActiveTab] = useState('Home');
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 100);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const currentItem = navItems.find((item) => item.url === location.pathname);
+    if (currentItem) {
+      setActiveTab(currentItem.name);
+    }
+  }, [location.pathname]);
+
+  return (
+    <div className="fixed top-0 left-1/2 -translate-x-1/2 z-50 pt-6">
+      <div className="flex items-center gap-3 border border-glass-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.name;
+
+          return (
+            <Link
+              key={item.name}
+              to={item.url}
+              onClick={() => setActiveTab(item.name)}
+              className={cn(
+                'relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors',
+                'text-text-muted hover:text-gold',
+                isActive && 'bg-gold/10 text-gold'
+              )}
+            >
+              <span className="hidden md:inline">{item.name}</span>
+              <span className="md:hidden">
+                <Icon size={18} strokeWidth={2.5} />
+              </span>
+              {isActive && (
+                <motion.div
+                  layoutId="lamp"
+                  className="absolute inset-0 w-full bg-gold/5 rounded-full -z-10"
+                  initial={false}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 30,
+                  }}
+                >
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-gold rounded-t-full">
+                    <div className="absolute w-12 h-6 bg-gold/20 rounded-full blur-md -top-2 -left-2" />
+                    <div className="absolute w-8 h-6 bg-gold/20 rounded-full blur-md -top-1" />
+                    <div className="absolute w-4 h-4 bg-gold/20 rounded-full blur-sm top-0 left-2" />
+                  </div>
+                </motion.div>
+              )}
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── MOBILE NAVBAR (keep existing behavior) ───
+function MobileNavBar() {
+  const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setMenuOpen(false);
+    setIsOpen(false);
   }, [location.pathname]);
 
   useEffect(() => {
-    if (menuOpen) {
+    if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-    return () => { document.body.style.overflow = ''; };
-  }, [menuOpen]);
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   return (
-    <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? 'bg-espresso/85 backdrop-blur-xl py-3'
-            : 'bg-transparent py-5'
-        }`}
-      >
-        <div className="content-max flex items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/images/logo/citywest-logo-dark.png"
-              alt={HOTEL_NAME}
-              className="h-10 w-auto object-contain"
-            />
-            <span className="font-display text-gold text-xl hidden sm:block">{HOTEL_NAME}</span>
-          </Link>
+    <div className="fixed top-0 left-0 right-0 z-50 md:hidden">
+      <div className="flex items-center justify-between px-4 py-4 bg-espresso/95 backdrop-blur-lg border-b border-glass-border">
+        <Link to="/" className="flex items-center gap-2">
+          <img
+            src="/images/logo/citywest-logo-dark.png"
+            alt={HOTEL_NAME}
+            className="h-8 w-auto object-contain"
+          />
+          <span className="text-gold text-sm font-display">{HOTEL_NAME}</span>
+        </Link>
+        <div className="flex items-center gap-2">
+          <a
+            href={`tel:${PHONE_NUMBER}`}
+            className="text-gold p-2"
+            aria-label="Call us"
+          >
+            <Phone className="w-5 h-5" />
+          </a>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 text-text-muted hover:text-gold transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </div>
 
-          {/* Desktop Nav Links */}
-          <div className="hidden lg:flex items-center gap-8">
-            {navItems.slice(1, 7).map((item) => (
+      {isOpen && (
+        <div className="bg-espresso/95 backdrop-blur-lg border-b border-glass-border">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.url;
+            return (
               <Link
-                key={item.href}
-                to={item.href}
-                className={`nav-link ${location.pathname === item.href ? 'text-gold' : ''}`}
+                key={item.name}
+                to={item.url}
+                onClick={() => setIsOpen(false)}
+                className={cn(
+                  'flex items-center gap-3 px-4 py-3 text-text-muted hover:bg-gold/10 transition-colors',
+                  isActive && 'text-gold bg-gold/5'
+                )}
               >
-                {item.label}
+                <Icon size={18} />
+                <span className="text-sm font-medium">{item.name}</span>
               </Link>
-            ))}
-          </div>
-
-          {/* Desktop CTA */}
-          <div className="hidden lg:flex items-center gap-4">
-            <a
-              href={`tel:${PHONE_NUMBER}`}
-              className="text-gold hover:text-gold-light transition-colors"
-              aria-label="Call us"
-            >
-              <Phone className="w-5 h-5" />
-            </a>
-            <a
-              href={getWhatsAppLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pill-button text-sm py-2.5 px-5"
+            );
+          })}
+          <div className="px-4 py-3 border-t border-glass-border">
+            <Link
+              to="/booking"
+              className="pill-button text-sm w-full text-center block"
             >
               Book Now
-            </a>
-          </div>
-
-          {/* Mobile Controls */}
-          <div className="flex lg:hidden items-center gap-4">
-            <a
-              href={`tel:${PHONE_NUMBER}`}
-              className="text-gold p-2"
-              aria-label="Call us"
-            >
-              <Phone className="w-5 h-5" />
-            </a>
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="text-white p-2 min-h-[48px] min-w-[48px] flex items-center justify-center"
-              aria-label="Toggle menu"
-            >
-              {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Overlay */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-espresso/95 backdrop-blur-lg lg:hidden">
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-gold to-transparent" />
-          <div className="flex flex-col items-center justify-center h-full gap-8 pt-20">
-            {navItems.map((item, i) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                className={`font-display text-3xl text-text-light hover:text-gold transition-colors ${
-                  location.pathname === item.href ? 'text-gold' : ''
-                }`}
-                style={{ animationDelay: `${i * 0.08}s` }}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <div className="absolute bottom-24 text-center">
-              <p className="text-text-muted text-sm font-body mb-2">Call us</p>
-              <a href={`tel:${PHONE_NUMBER}`} className="text-gold text-xl font-body font-light">
-                {PHONE_NUMBER}
-              </a>
-            </div>
+            </Link>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// ─── MAIN EXPORT ───
+export default function Navbar() {
+  return (
+    <>
+      <div className="hidden md:block">
+        <DesktopNavBar />
+      </div>
+      <div className="md:hidden">
+        <MobileNavBar />
+      </div>
     </>
   );
 }

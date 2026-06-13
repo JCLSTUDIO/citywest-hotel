@@ -3,7 +3,7 @@ import { getWhatsAppLink, PHONE_NUMBER } from '@/lib/constants';
 
 export default function MobileActionBar() {
   return (
-    <div className="fixed bottom-16 left-0 right-0 z-40 lg:hidden">
+    <div className="fixed bottom-16 left-0 right-0 z-10 lg:hidden">
       <div className="glass-panel mx-4 py-3 px-4 flex items-center justify-around">
         {/* WhatsApp */}
         <a

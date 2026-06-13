@@ -7,7 +7,7 @@ import MobileActionBar from './MobileActionBar';
 import { CitywestLoader } from '../CitywestLoader';
 
 export default function Layout() {
-  const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
@@ -16,16 +16,19 @@ export default function Layout() {
 
   return (
     <>
-      {loading && <CitywestLoader onComplete={() => setLoading(false)} logoSrc="/images/logo/citywest-logo-dark.png" />}
-      <div className={`transition-opacity duration-500 ${loading ? 'opacity-0' : 'opacity-100'}`}>
-        <Navbar />
-        <main className="min-h-screen">
-          <Outlet />
-        </main>
-        <Footer />
-        <MobileActionBar />
-        <MobileDock />
-      </div>
+      {showLoader && (
+        <CitywestLoader 
+          onComplete={() => setShowLoader(false)} 
+          logoSrc="/images/logo/citywest-logo-dark.png" 
+        />
+      )}
+      <Navbar />
+      <main className="min-h-screen pt-20 md:pt-32 pb-80 lg:pb-0">
+        <Outlet />
+      </main>
+      <Footer />
+      <MobileActionBar />
+      <MobileDock />
     </>
   );
 }

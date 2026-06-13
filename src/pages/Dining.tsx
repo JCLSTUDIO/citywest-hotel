@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Clock, MapPin, Phone } from 'lucide-react';
-import { getWhatsAppLink } from '@/lib/constants';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -84,14 +84,12 @@ export default function Dining() {
                     Ext. 201 for reservations
                   </div>
                 </div>
-                <a
-                  href={getWhatsAppLink('Hi CityWest Hotel, I would like to make a dining reservation.')}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/booking"
                   className="pill-button"
                 >
                   Make a Reservation
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -139,14 +137,12 @@ export default function Dining() {
                     </li>
                   </ul>
                 </div>
-                <a
-                  href={getWhatsAppLink('Hi CityWest Hotel, I would like to reserve a table at The Gold Lounge.')}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/booking"
                   className="pill-button-outline"
                 >
                   Reserve a Table
-                </a>
+                </Link>
               </div>
               <div>
                 <img

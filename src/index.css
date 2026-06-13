@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
+/* stylelint-disable at-rule-no-unknown */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -30,6 +31,7 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
@@ -47,8 +49,8 @@
   .glass-panel {
     @apply rounded-xl p-6;
     background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(201, 169, 110, 0.15);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
     transition: all 0.4s cubic-bezier(0.625, 0.05, 0, 1);
@@ -62,8 +64,8 @@
   .glass-panel-light {
     @apply rounded-xl p-6;
     background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border: 1px solid rgba(201, 169, 110, 0.2);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   }
@@ -71,8 +73,8 @@
   .glass-panel-elevated {
     @apply rounded-xl p-6;
     background: rgba(255, 252, 245, 0.08);
-    backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
     border: 1px solid rgba(201, 169, 110, 0.2);
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35), 0 0 40px rgba(201, 169, 110, 0.08);
   }
@@ -167,12 +169,13 @@
 
 @layer utilities {
   .text-balance {
-    text-wrap: balance;
+    white-space: normal; /* fallback */
+    text-wrap: balance;  /* modern browsers */
   }
 
   .scrollbar-hide {
     -ms-overflow-style: none;
-    scrollbar-width: none;
+    scrollbar-width: thin; /* modern browsers */
   }
 
   .scrollbar-hide::-webkit-scrollbar {

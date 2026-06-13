@@ -1,10 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './CitywestLoader.css';
 
-export const CitywestLoader = ({ onComplete, logoSrc = '/images/logo/citywest-logo-dark.png' }) => {
-    const loaderTextRef = useRef(null);
+interface CitywestLoaderProps {
+  onComplete?: () => void;
+  logoSrc?: string;
+}
+
+export const CitywestLoader = ({ onComplete, logoSrc = '/images/logo/citywest-logo-dark.png' }: CitywestLoaderProps) => {
+    const loaderTextRef = useRef<HTMLHeadingElement>(null);
     const [isAssembled, setIsAssembled] = useState(false);
     const [isComplete, setIsComplete] = useState(false);
+    const [shouldRender, setShouldRender] = useState(true);
     
     const words = ["CITYWEST", "HOTEL"];
     const fullText = "CITYWEST HOTEL";
@@ -13,17 +19,18 @@ export const CitywestLoader = ({ onComplete, logoSrc = '/images/logo/citywest-lo
         const loaderText = loaderTextRef.current;
         if (!loaderText) return;
 
-        let animationTimeout;
-        let wordCycleTimeout;
-        let assemblyTimeout;
-        let jitterInterval;
+        let animationTimeout: number | undefined;
+        let wordCycleTimeout: number | undefined;
+        let assemblyTimeout: number | undefined;
+        let jitterInterval: number | undefined;
         let currentWordIndex = 0;
 
         function animateWord() {
+            if (!loaderText) return;
             const word = words[currentWordIndex];
             loaderText.innerHTML = '';
 
-            const chars = word.split('').map((char, index) => {
+            word.split('').forEach((char, index) => {
                 const span = document.createElement('span');
                 span.className = 'char';
                 span.textContent = char;
@@ -44,49 +51,46 @@ export const CitywestLoader = ({ onComplete, logoSrc = '/images/logo/citywest-lo
                 span.style.animationFillMode = 'forwards';
                 
                 loaderText.appendChild(span);
-                return span;
             });
 
-            // If this is the second word (HOTEL), trigger assembly complete after fly-in
             if (currentWordIndex === words.length - 1) {
-                assemblyTimeout = setTimeout(() => {
+                assemblyTimeout = window.setTimeout(() => {
                     setIsAssembled(true);
-                    startJitter(chars);
-                }, (chars.length * 80) + 800);
+                    startJitter();
+                }, (word.length * 80) + 800);
             }
 
             if (currentWordIndex < words.length - 1) {
-                wordCycleTimeout = setTimeout(() => {
+                wordCycleTimeout = window.setTimeout(() => {
                     currentWordIndex++;
                     animateWord();
-                }, (chars.length * 80) + 1000);
+                }, (word.length * 80) + 1000);
             }
         }
 
-        function startJitter(chars) {
-            // Add space between words and re-render with jitter capability
+        function startJitter() {
+            if (!loaderText) return;
             loaderText.innerHTML = '';
             
-            const allChars = fullText.split('').map((char, index) => {
+            fullText.split('').forEach((char) => {
                 const span = document.createElement('span');
                 span.className = 'char assembled';
                 span.textContent = char;
                 if (char === ' ') span.style.width = '0.5em';
                 
-                // Start with slight random offsets for jitter base
                 const baseX = (Math.random() - 0.5) * 4;
                 const baseY = (Math.random() - 0.5) * 4;
                 const baseRot = (Math.random() - 0.5) * 2;
                 span.style.transform = `translate3d(${baseX}px, ${baseY}px, 0) rotateZ(${baseRot}deg)`;
                 
                 loaderText.appendChild(span);
-                return span;
             });
 
-            // Continuous jitter animation
-            jitterInterval = setInterval(() => {
+            const allChars = Array.from(loaderText.querySelectorAll('.char.assembled'));
+
+            jitterInterval = window.setInterval(() => {
                 allChars.forEach((span) => {
-                    if (span.textContent === ' ') return;
+                    if (!(span instanceof HTMLElement) || span.textContent === ' ') return;
                     const jitterX = (Math.random() - 0.5) * 6;
                     const jitterY = (Math.random() - 0.5) * 6;
                     const jitterRot = (Math.random() - 0.5) * 3;
@@ -98,23 +102,27 @@ export const CitywestLoader = ({ onComplete, logoSrc = '/images/logo/citywest-lo
                 });
             }, 150);
 
-            // Complete after loading time (adjust as needed)
-            animationTimeout = setTimeout(() => {
-                clearInterval(jitterInterval);
+            animationTimeout = window.setTimeout(() => {
+                if (jitterInterval) clearInterval(jitterInterval);
                 setIsComplete(true);
-                setTimeout(() => onComplete?.(), 500);
+                setTimeout(() => {
+                    setShouldRender(false);
+                    onComplete?.();
+                }, 500);
             }, 4000);
         }
 
         animateWord();
 
         return () => {
-            clearTimeout(animationTimeout);
-            clearTimeout(wordCycleTimeout);
-            clearTimeout(assemblyTimeout);
-            clearInterval(jitterInterval);
+            if (animationTimeout) clearTimeout(animationTimeout);
+            if (wordCycleTimeout) clearTimeout(wordCycleTimeout);
+            if (assemblyTimeout) clearTimeout(assemblyTimeout);
+            if (jitterInterval) clearInterval(jitterInterval);
         };
     }, [onComplete]);
+
+    if (!shouldRender) return null;
 
     return (
         <div className={`loader-container ${isComplete ? 'fade-out' : ''}`}>

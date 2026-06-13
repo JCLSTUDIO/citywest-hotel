@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Users, Bed, Maximize, Check } from 'lucide-react';
-import { rooms, getRoomWhatsAppLink } from '@/lib/constants';
+import { rooms } from '@/lib/constants';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,8 +49,8 @@ export default function Rooms() {
       </section>
 
       {/* Room List */}
-      <section ref={sectionRef} className="section-padding bg-espresso-light">
-        <div className="content-max space-y-8">
+      <section ref={sectionRef} className="section-padding bg-espresso-light relative z-30">
+        <div className="content-max space-y-8 pb-40">
           {rooms.map((room) => (
             <div
               key={room.slug}
@@ -115,14 +115,12 @@ export default function Rooms() {
                     >
                       View Details
                     </Link>
-                    <a
-                      href={getRoomWhatsAppLink(room.name)}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      to="/booking"
                       className="pill-button text-sm py-2.5 px-5"
                     >
                       Book Now
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>

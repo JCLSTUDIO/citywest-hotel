@@ -4,7 +4,7 @@ import {
   Users, Bed, Maximize, Check, ArrowLeft, ArrowRight,
   Wifi, Wind, Tv, Refrigerator, Bath, Eye, UtensilsCrossed
 } from 'lucide-react';
-import { rooms, getRoomWhatsAppLink } from '@/lib/constants';
+import { rooms } from '@/lib/constants';
 
 const featureIcons: Record<string, React.ElementType> = {
   'Free WiFi': Wifi,
@@ -136,15 +136,15 @@ export default function RoomDetail() {
                 <div className="space-y-4 mb-6">
                   <div>
                     <label className="text-text-muted text-xs block mb-2">Check-in Date</label>
-                    <input type="date" className="glass-input" />
+                    <input type="date" className="glass-input" placeholder="Full name" aria-label="Full name" />
                   </div>
                   <div>
                     <label className="text-text-muted text-xs block mb-2">Check-out Date</label>
-                    <input type="date" className="glass-input" />
+                    <input type="date" className="glass-input" placeholder="Email address" aria-label="Email address" />
                   </div>
                   <div>
                     <label className="text-text-muted text-xs block mb-2">Guests (Max {room.maxGuests})</label>
-                    <select className="glass-input">
+                    <select className="glass-input" title="Number of guests" aria-label="Number of guests">
                       {Array.from({ length: room.maxGuests }, (_, i) => (
                         <option key={i + 1} value={i + 1}>{i + 1} Guest{i > 0 ? 's' : ''}</option>
                       ))}
@@ -159,14 +159,12 @@ export default function RoomDetail() {
                   </div>
                 </div>
 
-                <a
-                  href={getRoomWhatsAppLink(room.name)}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/booking"
                   className="pill-button w-full text-center block"
                 >
-                  Book via WhatsApp
-                </a>
+                  Book Now
+                </Link>
               </div>
             </div>
           </div>

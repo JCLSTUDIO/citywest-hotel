@@ -7,7 +7,7 @@ import {
   Wind, Shield, UtensilsCrossed, Shirt, Star, ChevronLeft,
   ChevronRight, ArrowRight
 } from 'lucide-react';
-import { rooms, amenities, testimonials, getWhatsAppLink } from '@/lib/constants';
+import { rooms, amenities, testimonials } from '@/lib/constants';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -64,14 +64,12 @@ function Hero() {
           Premium accommodations, world-class dining, and unforgettable moments in Ogun State
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href={getWhatsAppLink()}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/booking"
             className="pill-button"
           >
             Book Your Stay
-          </a>
+          </Link>
           <Link to="/rooms" className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors text-sm">
             Explore Rooms <ArrowRight className="w-4 h-4" />
           </Link>
@@ -82,21 +80,19 @@ function Hero() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="text-text-muted text-xs block mb-2">Check-in</label>
-              <input type="date" className="glass-input" />
+              <input type="date" className="glass-input" placeholder="Check-in date" />
             </div>
             <div>
               <label className="text-text-muted text-xs block mb-2">Check-out</label>
-              <input type="date" className="glass-input" />
+              <input type="date" className="glass-input" placeholder="Check-out date" />
             </div>
             <div className="flex items-end">
-              <a
-                href={getWhatsAppLink()}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/booking"
                 className="pill-button w-full text-center"
               >
                 Check Availability
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -120,15 +116,16 @@ function RoomsPreview() {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
       gsap.from(sectionRef.current!.querySelectorAll('.room-card'), {
-        y: 60,
+        y: 40,
         opacity: 0,
-        scale: 0.95,
-        duration: 0.8,
-        stagger: 0.1,
+        scale: 0.98,
+        duration: 0.6,
+        stagger: 0.08,
         ease: 'power2.out',
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 80%',
+          start: 'top 85%',
+          toggleActions: 'play none none none',
         },
       });
     });
@@ -271,14 +268,15 @@ function AmenitiesSection() {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
       gsap.from(sectionRef.current!.querySelectorAll('.amenity-card'), {
-        y: 30,
+        y: 20,
         opacity: 0,
-        duration: 0.6,
-        stagger: 0.08,
+        duration: 0.5,
+        stagger: 0.06,
         ease: 'power2.out',
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 80%',
+          start: 'top 85%',
+          toggleActions: 'play none none none',
         },
       });
     });
@@ -289,10 +287,19 @@ function AmenitiesSection() {
     <section ref={sectionRef} className="section-padding bg-espresso relative overflow-hidden">
       {/* Marquee Background */}
       <div className="absolute inset-0 flex items-center pointer-events-none overflow-hidden opacity-20">
-        <div className="flex animate-marquee whitespace-nowrap">
-          <span className="font-display text-gold text-[15vw] min-w-full">CITYWESTHOTEL</span>
-          <span className="font-display text-gold text-[15vw] min-w-full">CITYWESTHOTEL</span>
-          <span className="font-display text-gold text-[15vw] min-w-full">CITYWESTHOTEL</span>
+        <div className="flex animate-marquee whitespace-nowrap w-max">
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
+          <span className="font-display text-gold text-[16vw] min-w-max px-4">CITYWEST HOTEL</span>
         </div>
       </div>
 
@@ -537,14 +544,12 @@ function CTASection() {
           Book your stay today and discover why CityWest Hotel is Ikenne&apos;s premier luxury destination.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href={getWhatsAppLink()}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/booking"
             className="pill-button glass-glow"
           >
             Book Your Stay
-          </a>
+          </Link>
           <Link to="/contact" className="pill-button-outline">
             Contact Us
           </Link>

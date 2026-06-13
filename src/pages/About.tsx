@@ -112,6 +112,8 @@ export default function About() {
                 <div
                   className="w-20 h-20 sm:w-24 sm:h-24 rounded-full mx-auto mb-3 flex items-center justify-center text-espresso font-bold text-lg"
                   style={{ backgroundColor: member.color }}
+                  role="img"
+                  aria-label={`${member.name} profile`}
                 >
                   {member.initials}
                 </div>

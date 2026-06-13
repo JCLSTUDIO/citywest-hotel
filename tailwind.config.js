@@ -115,7 +115,7 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "caret-blink": "caret-blink 1.25s ease-out infinite",
-        "marquee": "marquee 15s linear infinite",
+        "marquee": "marquee 25s linear infinite",
         "shimmer": "shimmer 3s ease-in-out infinite",
         "gold-pulse": "gold-pulse 3s ease-in-out infinite",
         "bounce-subtle": "bounce-subtle 2s ease-in-out infinite",
