@@ -76,7 +76,7 @@ export default function Booking() {
     e.preventDefault();
     if (!activeRoom) return;
 
-    const businessPhoneNumber = "234XXXXXXXXXX"; // Replace with your active business WhatsApp number
+    const businessPhoneNumber = "2347048061861"; // Replace with your active business WhatsApp number
     
     const messageTemplate = `*NEW RESERVATION REQUEST*
 ----------------------------------
