@@ -34,6 +34,7 @@ const navItems: NavItem[] = [
 function DesktopNavBar() {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState('Home');
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const currentItem = navItems.find((item) => item.url === location.pathname);
@@ -42,9 +43,29 @@ function DesktopNavBar() {
     }
   }, [location.pathname]);
 
+  // Track scroll position to enhance background contrast on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className="fixed top-0 left-1/2 -translate-x-1/2 z-50 pt-6">
-      <div className="flex items-center gap-3 border border-glass-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg">
+    <div className="fixed top-0 left-1/2 -translate-x-1/2 z-50 pt-6 transition-all duration-300">
+      {/* Added bg-espresso/70 as default and bg-espresso/90 on scroll to match the sample design */}
+      <div 
+        className={cn(
+          "flex items-center gap-3 border border-glass-border backdrop-blur-xl py-1 px-1 rounded-full shadow-lg transition-all duration-300",
+          isScrolled ? "bg-espresso/90 shadow-2xl" : "bg-espresso/70"
+        )}
+      >
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.name;

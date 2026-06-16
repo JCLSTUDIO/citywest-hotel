@@ -23,6 +23,7 @@ export const CitywestLoader = ({ onComplete, logoSrc = '/images/logo/citywest-lo
         let wordCycleTimeout: number | undefined;
         let assemblyTimeout: number | undefined;
         let jitterInterval: number | undefined;
+        let exitTimeout: number | undefined;
         let currentWordIndex = 0;
 
         function animateWord() {
@@ -105,7 +106,7 @@ export const CitywestLoader = ({ onComplete, logoSrc = '/images/logo/citywest-lo
             animationTimeout = window.setTimeout(() => {
                 if (jitterInterval) clearInterval(jitterInterval);
                 setIsComplete(true);
-                setTimeout(() => {
+                exitTimeout = window.setTimeout(() => {
                     setShouldRender(false);
                     onComplete?.();
                 }, 500);
@@ -119,6 +120,7 @@ export const CitywestLoader = ({ onComplete, logoSrc = '/images/logo/citywest-lo
             if (wordCycleTimeout) clearTimeout(wordCycleTimeout);
             if (assemblyTimeout) clearTimeout(assemblyTimeout);
             if (jitterInterval) clearInterval(jitterInterval);
+            if (exitTimeout) clearTimeout(exitTimeout);
         };
     }, [onComplete]);
 

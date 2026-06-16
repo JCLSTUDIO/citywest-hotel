@@ -23,14 +23,19 @@ function Hero() {
   useEffect(() => {
     if (!textRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.from(textRef.current!.children, {
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.15,
-        ease: 'power2.out',
-        delay: 6.5,
-      });
+      // Changed to fromTo to prevent text from locking at opacity 0
+      gsap.fromTo(
+        textRef.current!.children,
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          stagger: 0.15,
+          ease: 'power2.out',
+          delay: 6.5,
+        }
+      );
     });
     return () => ctx.revert();
   }, []);
@@ -115,19 +120,24 @@ function RoomsPreview() {
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.from(sectionRef.current!.querySelectorAll('.room-card'), {
-        y: 40,
-        opacity: 0,
-        scale: 0.98,
-        duration: 0.6,
-        stagger: 0.08,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-      });
+      // FIX: Using fromTo explicit targets solves the double-initialization blank space bug
+      gsap.fromTo(
+        sectionRef.current!.querySelectorAll('.room-card'),
+        { y: 40, opacity: 0, scale: 0.98 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
     });
     return () => ctx.revert();
   }, []);
@@ -188,17 +198,22 @@ function DiningPreview() {
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.from(sectionRef.current!.querySelectorAll('.dining-item'), {
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        },
-      });
+      // Changed to fromTo to guarantee safety on route changes
+      gsap.fromTo(
+        sectionRef.current!.querySelectorAll('.dining-item'),
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+          },
+        }
+      );
     });
     return () => ctx.revert();
   }, []);
@@ -267,18 +282,23 @@ function AmenitiesSection() {
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.from(sectionRef.current!.querySelectorAll('.amenity-card'), {
-        y: 20,
-        opacity: 0,
-        duration: 0.5,
-        stagger: 0.06,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-      });
+      // Changed to fromTo to guarantee safety on route changes
+      gsap.fromTo(
+        sectionRef.current!.querySelectorAll('.amenity-card'),
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.06,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
     });
     return () => ctx.revert();
   }, []);
